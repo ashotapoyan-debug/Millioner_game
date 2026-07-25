@@ -18,3 +18,4 @@ game = document.querySelector('.game')
 let changeQuestion = document.getElementById('hitBox')
 let extraQuestion = document.getElementById('extra')
 let flagExtra = true
+

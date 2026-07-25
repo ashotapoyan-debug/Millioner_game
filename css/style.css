@@ -8,30 +8,30 @@ img {
 
 body {
     margin: 0;
-    color:rgb(2, 7, 56);
-    font-family: "Montserrat",sans-serif;
+    color: rgb(2, 7, 56);
+    font-family: "Montserrat", sans-serif;
     height: 100vh;
 }
 
-.start-btn{
+.start-btn {
     outline: none;
     border: none;
     padding: 10px 20px;
     border-radius: 30px;
     cursor: pointer;
     font-size: 18;
-    color:white;
-    background: rgb(59,78,133);
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+    color: white;
+    background: rgb(59, 78, 133);
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
     text-transform: uppercase;
-    box-shadow: 0 0 10px 0px rgb(255,255,255);
+    box-shadow: 0 0 10px 0px rgb(255, 255, 255);
     display: block;
     margin: auto;
     margin-top: 250px;
     transition: 1s;
 }
 
-.information{
+.information {
     position: absolute;
     top: 20px;
     right: 20px;
@@ -46,18 +46,18 @@ body {
     z-index: 10;
 }
 
-.start-btn:hover{
-    box-shadow: 0 0 15px 0px rgb(97,219,131);
+.start-btn:hover {
+    box-shadow: 0 0 15px 0px rgb(97, 219, 131);
     transform: scale(1.2);
 }
 
-.game{
+.game {
     min-height: 100vh;
     background-image: url("../img/images1.jpg"),
-    url("../img/galaxy.jpg");
+        url("../img/galaxy.jpg");
     background-size: 90%, 100%, cover;
-    background-position: center,center;
-    background-repeat: no-repeat,no-repeat;
+    background-position: center, center;
+    background-repeat: no-repeat, no-repeat;
     background-color: #2a3155;
     padding: 50px, 0;
     background-attachment: fixed;
@@ -67,7 +67,7 @@ body {
     position: relative;
 }
 
-.rules-popup{
+.rules-popup {
     position: fixed;
     top: 0;
     left: 0;
@@ -80,15 +80,15 @@ body {
     z-index: 100;
     opacity: 0;
     visibility: hidden;
-    transition: opacity 0.3s ease,visibility 0.3s ease;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
 }
 
-.rules-popup.show{
+.rules-popup.show {
     opacity: 1;
     visibility: visible;
 }
 
-.rules-content{
+.rules-content {
     background: white;
     padding: 30px;
     border-radius: 10px;
@@ -98,26 +98,26 @@ body {
     transition: transform 0.3s ease;
 }
 
-.rules-popup.show .rules-content{
+.rules-popup.show .rules-content {
     transform: scale(1);
 }
 
-.container{
+.container {
     width: 90%;
     margin: 0 auto;
 }
 
-.game-block{
+.game-block {
     border-radius: 15px;
-    border: 2px ,solid #a7a7a7;
+    border: 2px, solid #a7a7a7;
     padding: 20px 0 30px 0;
-    box-shadow: 0 0 5px 0px rgb(255,255,255);
+    box-shadow: 0 0 5px 0px rgb(255, 255, 255);
     opacity: 0;
     display: none;
     transition: 2s;
 }
 
-.game-title{
+.game-title {
     margin-top: 0;
     font-family: 'Montserrat', sans-serif;
     text-transform: uppercase;
@@ -125,14 +125,18 @@ body {
     font-size: 30px;
     letter-spacing: 5px;
     color: white;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
 }
 
-.game-wrap{
+.game-wrap {
     position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
     font-size: 20px;
-    transform:  perspective(400px) rotate(1,0,0,90deg);
+    transform: perspective(400px) rotate(1, 0, 0, 90deg);
+}
+
+.block-questions{
+    flex-basis: 70%; 
 }
