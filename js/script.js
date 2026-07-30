@@ -27,7 +27,7 @@ let aiExplainBlock = document.getElementById('aiExplainBlock')
 let aiExplainText = document.getElementById('aiExplainText')
 let aiExplainClose = document.getElementById('aiExplainClose')
 
-const OPEN_AI_KEY = ''
+const OPENAI_API_KEY = ''
 const OPENAI_MODEL = ''
 
 showBtn.addEventListener('click', () => {
@@ -178,3 +178,174 @@ btnAnswers.forEach((item) => {
 })
 
 let helpSound = new Audio('./music/50-50.mp3')
+
+helpFiffy.addEventListener('click', function removeTwoBlocks() {
+    helpSound.play()
+    let blockActiveQuestion = getActiveBlockQuestion()
+    let numRandom = Math.floor(Math.random() * blockActiveQuestion.children[1].length)
+    let blockChildrenAnsver = blockActiveQuestion.children[1].children
+    let nameQuestion = blockActiveQuestion.classList[1]
+    let blockCorrectAnsver = getBlockAnsver(blockChildrenAnsver, nameQuestion)
+    blockCorrectAnsver.classList.add('fifty-active')
+    let blockRandom = getBlockRandom(blockChildrenAnsver, blockCorrectAnsver, numRandom)
+    blockRandom.classList.add('fifty-active')
+    removeBlocks(blockChildrenAnsver)
+    helpFiffy.classList.add('hints-help_spend', 'block-event')
+})
+
+helpHall.addEventListener('click', function getHelpHall() {
+    // Կանչում ենք ֆունկցիա, որը վերադարձնում է տվյալ պահին ակտիվ հարցի բլոկը
+    let blockActiveQuestion = getActiveBlockQuestion();
+    // blockActiveQuestionChild - պահպանում ենք պատասխաններով օբյեկտը
+    let blockActiveQuestionChild = blockActiveQuestion.children[1];
+    checkBlockChild(blockActiveQuestionChild);
+    // Կանչում ենք ձայնը
+    const helpSound = new Audio('./music/hall-sound.mp3');
+    helpSound.play(); // Երաժշտությունը սկսվում է անմիջապես
+    // Երաժշտությունը կանգնում է 5 վայրկյան հետո
+    setTimeout(() => {
+        helpSound.pause(); // Երաժշտությունը կանգնում է
+        helpSound.currentTime = 0;
+    }, 10000); // 5000 միլիսեկունդ = 5 վայրկյան
+    // 5 վայրկյան սպասելուց հետո սկսում ենք փոխել պատասխանները
+    setTimeout(() => {
+        // Կանչում ենք ցիկլ, որը ուսումնասիրում է բոլոր պատասխանները
+        for (let i = 0; i < blockActiveQuestionChild.children.length; i++) {
+            // percentageRandom - գեներացնում ենք 0-100 միջակայքում պատահական թիվ
+            let percentageRandom = Math.floor(Math.random() * 101);
+            blockActiveQuestionChild.children[i].insertAdjacentHTML('afterbegin', '<div class="answer-active"></div>');
+            setTimeout(() => {
+                blockActiveQuestionChild.children[i].children[0].style.width = percentageRandom + '%';
+                blockActiveQuestionChild.children[i].classList.add('color-active');
+            });
+        }
+    }, 2000); // 5 վայրկյան ուշացում
+    // Բլոկի վրա արգելք ենք դնում և անջատում ենք իրադարձություն լսողը
+    helpHall.classList.add('hints-help_spent', 'block-event');
+});
+
+helpFriend.addEventListener('click', function getHelpFrien() {
+    // այս ֆունկցիայի միջոցով գտնում և պահպանում ենք այն հարցի բլոկը , որը այդ պահին տեսնում է օգտատերը
+    let blockActiveQuestion = getActiveBlockQuestion();
+    // blockActiveQuestionChild - պահում է պատասխաններով օբյեկտը
+    let blockActiveQuestionChild = blockActiveQuestion.children[1];
+    checkBlockChild(blockActiveQuestionChild);
+    // Ֆունկցիան վերադարձնում է 0-3 պատահական թիվ և ստուգում բլոների քանակը
+    let numRandom = getActiveBlockLength(blockActiveQuestionChild);
+    // Վերադարձնում է պատահական թիվ մինիմումից 100
+    let percentageRandom = getRandom(100, 100);
+    // ավելացնում է գրաֆիկական փոփոխություններ պատահականորեն ընտրված բլոկի մեջ:
+    blockActiveQuestionChild.children[numRandom].insertAdjacentHTML('afterbegin', '<div class="answer-active"></div>');
+    setTimeout(() => {
+        blockActiveQuestionChild.children[numRandom].children[0].style.width = percentageRandom + '%';
+        blockActiveQuestionChild.children[numRandom].classList.add('color-active');
+    }, 3000);
+    // Երաժշտություն՝ սկսելով 13-րդ վայրկյանից և տևելով 5 վայրկյան
+    const friendCallSound = new Audio('./music/phone-sound.mp3');
+    friendCallSound.currentTime = 13; // Սկսում է 13-րդ վայրկյանից
+    friendCallSound.play();
+    // 5 վայրկյան անց կանգնեցնում ենք
+    setTimeout(() => {
+        friendCallSound.pause();
+        friendCallSound.currentTime = 0;
+    }, 5000);
+    // Բլոկի վրա արգելք ենք դնում և անջատում ենք իրադարձություն լսողը
+    helpFriend.classList.add('hints-help_spent', 'block-event');
+});
+
+helpAI.addEventListener('click', async function getHelpAI() {
+    let blockActiveQuestion = getActiveBlockQuestion()
+    let blockActiveQuestionChild = blockActiveQuestion.children[1]
+    checkBlockChild(blockActiveQuestionChild)
+    let questionText = []
+    for (let i = 0; i < blockActiveQuestionChild.children; i++) {
+        answerOptions.push(blockActiveQuestionChild.children[i].innerText.trim())
+    }
+    helpAI.classList.add('hints-help_spent', 'block-event')
+    try {
+        const aiResult = await askAI(questionText, answerOptions)
+        let aiIndex = answerOptions.findIndex(opt => opt == aiResult.answer)
+        if (aiIndex === -1) {
+            let aiIndex = answerOptions.findIndex(opt => opt.startsWith(aiResult.answer.charAt(0)))
+        }
+        for (let i = 0; i < blockActiveQuestionChild.children.length; i++) {
+            let percentage = (i === aiIndex) ? getRandom(85, 99) : getRandom(1, 30)
+            blockActiveQuestionChild.children[i].insertAdjacentElement('afterbegin', '<div class="ansver-active"></div>')
+            setTimeout(() => {
+                blockActiveQuestionChild.children[i].children[0].style.width = percentage + '%';
+                blockActiveQuestionChild.children[i].classList.add('color-active');
+            }, 300);
+        }
+        aiExplainText.innerText = aiResult.explanation
+        aiExplainBlock.classList.add('swow')
+    } catch (err) {
+        console.error('ԱԲ օգնության սխալ', err)
+        aiExplainText.innerText = 'ԱԲ-ից պատասխան ստանալ չհաջողվեց'
+        aiExplainBlock.classList.add('swow')
+    }
+})
+
+aiExplainClose.addEventListener('click', () => {
+    aiExplainBlock.classList.remove('show')
+})
+
+async function askAI(questionText, answerOptions) {
+    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+            'Content-type': 'application/josn',
+            'Authorization': `Bearer ${OPENAI_API_KEY}`
+        },
+        body: JSON.stringify({
+            model: OPENAI_MODEL,
+            temperature: 0,
+            response_format: { type: 'json_object' },
+            messages: [
+                {
+                    role: 'system',
+                    content: 'Դու օգնում ես «Ո՞վ է ուզում դառնալ միլիոնատեր» խաղում։ ' +
+                        'Ընտրիր ճիշտ պատասխանը տրված տարբերակներից և բացատրիր կարճ (2-3 նախադասությամբ)՝ ինչու է այն ճիշտ։ ' +
+                        'Պատասխանիր ԲԱՑԱՌԱՊԵՍ JSON ձևաչափով՝ {"answer": "<տարբերակի ամբողջական տեքստը>", "explanation": "<բացատրություն>"}, ոչինչ ավելին։'
+                },
+                {
+                    role: 'user',
+                    content: `Հարց: ${questionText}\nՏարբերակներ:\n${answerOptions.join('\n')}`
+                }
+            ]
+        })
+    })
+
+}
+
+function getStartGame() {
+    getStartQusestion()
+    getStartBlockAnswers()
+    getStartBlockWins()
+    getStartBlocksHelp()
+}
+
+function getStartQusestion() {
+    for (let i = 0; i < blockQuestion.length; i++) {
+        blockQuestion[i].children[1].classList.remove('block-event')
+        blockQuestion[i].classList.remove('animate__fadeOut')
+        if (blockQuestion[i].classList.contains('question-active')) {
+            blockQuestion[i].classList.remove('question-active')
+        }
+        blockQuestion[0].classList.add('question-active')
+    }
+}
+
+function getStartBlockAnswers() {
+    for (let i = 0; i < btnAnswers.length; i++) {
+        if (btnAnswers[i].children[0]) {
+            btnAnswers[i].children[0].remove()
+        }
+        btnAnswers[i].classList.remove('green-bg', 'error-answer', 'fifty-active','animate__zoomOut', 'color-active')
+    }
+}
+
+function getStartBlockAnswers() {
+    for (let i = 0; i < winBlock.length; i++) {
+        winBlock[i].classList.remove('wins-active','animate__animated','animate__pulse','win-guaranteed','animate__tada','animate__heartBeat')        
+    }
+}
