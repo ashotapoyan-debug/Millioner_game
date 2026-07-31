@@ -19,7 +19,7 @@ body {
     padding: 10px 20px;
     border-radius: 30px;
     cursor: pointer;
-    font-size: 18;
+    font-size: 18px;
     color: white;
     background: rgb(59, 78, 133);
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
@@ -36,12 +36,12 @@ body {
     top: 20px;
     right: 20px;
     padding: 10px 20px;
-    background-color: rgb(59, 78, 133);
+    background: rgb(59, 78, 133);
     color: white;
     border: none;
     border-radius: 8px;
     cursor: pointer;
-    font-size: 18px;
+    font-size: 16px;
     text-transform: uppercase;
     z-index: 10;
 }
@@ -109,7 +109,7 @@ body {
 
 .game-block {
     border-radius: 15px;
-    border: 2px, solid #a7a7a7;
+    border: 2px solid #a7a7a7;
     padding: 20px 0 30px 0;
     box-shadow: 0 0 5px 0px rgb(255, 255, 255);
     opacity: 0;
@@ -144,7 +144,7 @@ body {
 .block-questions h2{
     text-align: center;
     font-weight: 600;
-    margin: 0.auto 50px;
+    margin: 0 auto 50px;
     color: white;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
 }

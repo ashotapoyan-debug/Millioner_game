@@ -8,7 +8,7 @@ let mainGame = document.querySelector('.game-block'),
     blockQuestion = document.querySelectorAll('.question'),
     helpBtns = document.querySelectorAll('.hints-help'),
     winBlock = document.querySelectorAll('.wins-block'),
-    helpFiffy = document.querySelector('.fifty-fifty'),
+    helpFifty = document.querySelector('.fifty-fifty'),
     helpHall = document.querySelector('.help-help'),
     helpFriend = document.querySelector('.call-friend'),
     helpAI = document.querySelector('.ai-help'),
@@ -79,12 +79,12 @@ endBtn.addEventListener('click', () => {
     generalMusic.pause()
 
 
-    let activWin = document.querySelector('.wins-active') || doocument.querySelector('.win-guaranteed')
+    let activeWin = document.querySelector('.wins-active') || doocument.querySelector('.win-guaranteed')
     if (activeWin) {
-        let spans = activeWin.querySelector('.span')
-        spans.foEach(span => span.remove()) //?
+        let spans = activeWin.querySelector('span')
+        spans.forEach(span => span.remove()) //?
 
-        let visibleAmount = activWin.imerText.trin()
+        let visibleAmount = activeWin.innerText.trim()
         let exisitigWin = document.querySelector('.user-win')
         if (exisitigWin) {
             exisitigWin.remove()
@@ -93,7 +93,7 @@ endBtn.addEventListener('click', () => {
         let winDiv = document.createElement('div')
         winDiv.className = 'user-win animate__animated animate __fadIn'
         winDiv.style.cssText = 'text-align: center; font-size: 24px; color: white ;margin-top : 300px;';
-        startBtn.insertAdjacentElement('.afterend', winDiv)
+        startBtn.insertAdjacentElement('afterend', winDiv)
         setTimeout(() => {
             winDiv.classList.replace('animate__fadeIn', 'animate__fadeout')
             setTimeout(() => winDiv.remove(), 2000)
@@ -164,7 +164,7 @@ btnAnswers.forEach((btnAnswer) => {
         let blockQuestionParentElement = blockAnswer.parentElement
 
         blockQuestionParentElement.classList.add('block-event')
-        correctnesAnsver(numberQuestion, userAnswer, blockAnswer, blockQuestionParentElement)
+        correctnessAnswer(numberQuestion, userAnswer, blockAnswer, blockQuestionParentElement)
     })
 })
 btnAnswers.forEach((item) => {
@@ -179,18 +179,18 @@ btnAnswers.forEach((item) => {
 
 let helpSound = new Audio('./music/50-50.mp3')
 
-helpFiffy.addEventListener('click', function removeTwoBlocks() {
+helpFifty.addEventListener('click', function removeTwoBlocks() {
     helpSound.play()
     let blockActiveQuestion = getActiveBlockQuestion()
     let numRandom = Math.floor(Math.random() * blockActiveQuestion.children[1].length)
     let blockChildrenAnsver = blockActiveQuestion.children[1].children
     let nameQuestion = blockActiveQuestion.classList[1]
-    let blockCorrectAnsver = getBlockAnsver(blockChildrenAnsver, nameQuestion)
+    let blockCorrectAnsver = getBlockAnswer(blockChildrenAnsver, nameQuestion)
     blockCorrectAnsver.classList.add('fifty-active')
     let blockRandom = getBlockRandom(blockChildrenAnsver, blockCorrectAnsver, numRandom)
     blockRandom.classList.add('fifty-active')
     removeBlocks(blockChildrenAnsver)
-    helpFiffy.classList.add('hints-help_spend', 'block-event')
+    helpFifty.classList.add('hints-help_spent', 'block-event')
 })
 
 helpHall.addEventListener('click', function getHelpHall() {
@@ -270,18 +270,18 @@ helpAI.addEventListener('click', async function getHelpAI() {
         }
         for (let i = 0; i < blockActiveQuestionChild.children.length; i++) {
             let percentage = (i === aiIndex) ? getRandom(85, 99) : getRandom(1, 30)
-            blockActiveQuestionChild.children[i].insertAdjacentElement('afterbegin', '<div class="ansver-active"></div>')
+            blockActiveQuestionChild.children[i].insertAdjacentElement('afterbegin', '<div class="answer-active"></div>')
             setTimeout(() => {
                 blockActiveQuestionChild.children[i].children[0].style.width = percentage + '%';
                 blockActiveQuestionChild.children[i].classList.add('color-active');
             }, 300);
         }
         aiExplainText.innerText = aiResult.explanation
-        aiExplainBlock.classList.add('swow')
+        aiExplainBlock.classList.add('show')
     } catch (err) {
         console.error('ԱԲ օգնության սխալ', err)
         aiExplainText.innerText = 'ԱԲ-ից պատասխան ստանալ չհաջողվեց'
-        aiExplainBlock.classList.add('swow')
+        aiExplainBlock.classList.add('show')
     }
 })
 
@@ -293,7 +293,7 @@ async function askAI(questionText, answerOptions) {
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
         method: 'POST',
         headers: {
-            'Content-type': 'application/josn',
+            'Content-Type': 'application/json',
             'Authorization': `Bearer ${OPENAI_API_KEY}`
         },
         body: JSON.stringify({
@@ -318,13 +318,13 @@ async function askAI(questionText, answerOptions) {
 }
 
 function getStartGame() {
-    getStartQusestion()
+    getStartQuestions()
     getStartBlockAnswers()
     getStartBlockWins()
     getStartBlocksHelp()
 }
 
-function getStartQusestion() {
+function getStartQuestions() {
     for (let i = 0; i < blockQuestion.length; i++) {
         blockQuestion[i].children[1].classList.remove('block-event')
         blockQuestion[i].classList.remove('animate__fadeOut')
@@ -344,8 +344,16 @@ function getStartBlockAnswers() {
     }
 }
 
-function getStartBlockAnswers() {
+function getStartBlockWins() {
     for (let i = 0; i < winBlock.length; i++) {
         winBlock[i].classList.remove('wins-active','animate__animated','animate__pulse','win-guaranteed','animate__tada','animate__heartBeat')        
     }
 }
+
+function getStartBlocksHelp() {
+    for (let i = 0; i < helpBtns.length; i++) {
+      helpBtns[i].classList.remove('block-event', 'hints-help_spent');
+    }
+    aiExplainBlock.classList.remove('show');
+    aiExplainText.innerText = '';
+  }
